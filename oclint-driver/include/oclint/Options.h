@@ -19,6 +19,7 @@ namespace option
     std::string etcPath();
     std::string homePath();
     std::vector<std::string> rulesPath();
+    std::vector<std::string> excludesPath();
     std::string reporterPath();
 
     bool hasOutputPath();

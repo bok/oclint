@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "oclint/Logger.h"
+#include "oclint/Options.h"
 #include "oclint/ResultCollector.h"
 #include "oclint/RuleBase.h"
 #include "oclint/RuleCarrier.h"
@@ -24,9 +25,10 @@ void RulesetBasedAnalyzer::analyze(std::vector<clang::ASTContext *> &contexts)
         auto violationSet = new ViolationSet();
         auto carrier = new RuleCarrier(context, violationSet);
         LOG_VERBOSE(carrier->getMainFilePath().c_str());
+        std::vector<std::string> excludes = option::excludesPath();
         for (RuleBase *rule : _filteredRules)
         {
-            rule->takeoff(carrier);
+            rule->takeoff(carrier, &excludes);
         }
         ResultCollector *results = ResultCollector::getInstance();
         results->add(violationSet);

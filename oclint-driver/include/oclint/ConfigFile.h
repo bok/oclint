@@ -34,6 +34,7 @@ private:
     std::vector<llvm::StringRef> _rules;
     std::vector<llvm::StringRef> _disableRules;
     std::vector<llvm::StringRef> _rulePaths;
+    std::vector<llvm::StringRef> _excludePaths;
     std::vector<RuleConfigurationPair> _ruleConfigurations;
     llvm::StringRef _output;
     llvm::StringRef _reportType;
@@ -50,6 +51,7 @@ public:
     const std::vector<llvm::StringRef> &rules() const;
     const std::vector<llvm::StringRef> &disableRules() const;
     const std::vector<llvm::StringRef> &rulePaths() const;
+    const std::vector<llvm::StringRef> &excludePaths() const;
     const std::vector<RuleConfigurationPair> &ruleConfigurations() const;
     llvm::Optional<std::string> output() const;
     llvm::Optional<std::string> reportType() const;

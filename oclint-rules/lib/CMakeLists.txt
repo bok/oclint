@@ -12,6 +12,7 @@ IF (MINGW)
         ${AbstractSource}
         helper/AttributeHelper.cpp
         helper/EnforceHelper.cpp
+        helper/ExcludeHelper.cpp
         helper/SuppressHelper.cpp
         util/ASTUtil.cpp
         util/StdUtil.cpp)

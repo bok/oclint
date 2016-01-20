@@ -2,6 +2,7 @@
 #define OCLINT_RULEBASE_H
 
 #include <string>
+#include <vector>
 
 #include "oclint/RuleCarrier.h"
 
@@ -12,11 +13,13 @@ class RuleBase
 {
 protected:
     RuleCarrier *_carrier;
+    std::vector<std::string> *_excludePaths;
 
 public:
-    void takeoff(RuleCarrier *carrier)
+    void takeoff(RuleCarrier *carrier, std::vector<std::string> *excludePaths = nullptr)
     {
         _carrier = carrier;
+        _excludePaths = excludePaths;
         apply();
     }
 

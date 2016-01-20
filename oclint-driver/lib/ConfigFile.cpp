@@ -126,6 +126,11 @@ const std::vector<llvm::StringRef> &oclint::option::ConfigFile::rulePaths() cons
     return _rulePaths;
 }
 
+const std::vector<llvm::StringRef> &oclint::option::ConfigFile::excludePaths() const
+{
+    return _excludePaths;
+}
+
 const std::vector<RuleConfigurationPair> &oclint::option::ConfigFile::ruleConfigurations() const
 {
     return _ruleConfigurations;
@@ -195,6 +200,7 @@ void oclint::option::ConfigFile::mapping(llvm::yaml::IO& inputOutput)
     inputOutput.mapOptional("rules", _rules);
     inputOutput.mapOptional("disable-rules", _disableRules);
     inputOutput.mapOptional("rule-paths", _rulePaths);
+    inputOutput.mapOptional("exclude-paths", _excludePaths);
     inputOutput.mapOptional("rule-configurations", _ruleConfigurations);
     inputOutput.mapOptional("output", _output);
     inputOutput.mapOptional("report-type", _reportType);

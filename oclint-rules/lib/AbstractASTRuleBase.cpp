@@ -1,5 +1,6 @@
 #include "oclint/AbstractASTRuleBase.h"
 #include "oclint/helper/SuppressHelper.h"
+#include "oclint/helper/ExcludeHelper.h"
 
 namespace oclint
 {
@@ -11,6 +12,9 @@ void AbstractASTRuleBase::addViolation(clang::SourceLocation startLocation,
     clang::SourceLocation endLocation, RuleBase *rule, const std::string& message)
 {
     clang::SourceManager *sourceManager = &_carrier->getSourceManager();
+    if (isExcluded(startLocation, _excludePaths, sourceManager)) {
+        return;
+    }
     /* if it is a macro location return the expansion location or the spelling location */
     clang::SourceLocation startFileLoc = sourceManager->getFileLoc(startLocation);
     clang::SourceLocation endFileLoc = sourceManager->getFileLoc(endLocation);
@@ -18,7 +22,7 @@ void AbstractASTRuleBase::addViolation(clang::SourceLocation startLocation,
     if (!shouldSuppress(beginLine, *_carrier->getASTContext()))
     {
         llvm::StringRef filename = sourceManager->getFilename(startFileLoc);
-        _carrier->addViolation(filename.str(),
+        _carrier->addViolation(getAbsolutePath(filename).str(),
             beginLine,
             sourceManager->getPresumedColumnNumber(startFileLoc),
             sourceManager->getPresumedLineNumber(endFileLoc),

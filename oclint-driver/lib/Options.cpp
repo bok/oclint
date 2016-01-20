@@ -62,6 +62,12 @@ static llvm::cl::opt<bool> argListEnabledRules("list-enabled-rules",
     llvm::cl::desc("List enabled rules"),
     llvm::cl::init(false),
     llvm::cl::cat(OCLintOptionCategory));
+static llvm::cl::list<std::string> argExcludesPath("E",
+    llvm::cl::Prefix,
+    llvm::cl::desc("Add directory to exclude path"),
+    llvm::cl::value_desc("directory"),
+    llvm::cl::ZeroOrMore,
+    llvm::cl::cat(OCLintOptionCategory));
 static llvm::cl::opt<int> argMaxP1("max-priority-1",
     llvm::cl::desc("The max allowed number of priority 1 violations"),
     llvm::cl::value_desc("threshold"),
@@ -157,6 +163,11 @@ static void processConfigFile(const std::string &path)
         disableRules.push_back(rule.str());
     }
     filter.disableRules(disableRules.begin(), disableRules.end());
+
+    for (const llvm::StringRef &excludePath : config.excludePaths())
+    {
+        argExcludesPath.push_back(excludePath.str());
+    }
 
     updateArgIfSet(argOutput, config.output());
     updateArgIfSet(argReportType, config.reportType());
@@ -259,6 +270,16 @@ std::vector<std::string> oclint::option::rulesPath()
     std::string defaultRulePath = libPath() + "/oclint/rules";
     std::vector<std::string> defaultRulesPath { defaultRulePath };
     return defaultRulesPath;
+}
+
+std::vector<std::string> oclint::option::excludesPath()
+{
+    if (argExcludesPath.size() > 0)
+    {
+        return argExcludesPath;
+    }
+    std::vector<std::string> defaultExcludesPath {};
+    return defaultExcludesPath;
 }
 
 std::string oclint::option::reporterPath()
