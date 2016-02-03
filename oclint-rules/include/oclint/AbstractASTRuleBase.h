@@ -24,6 +24,14 @@ protected:
     void addViolation(const clang::Decl *decl, RuleBase *rule, const std::string& message = "");
     void addViolation(const clang::Stmt *stmt, RuleBase *rule, const std::string& message = "");
 
+    bool isExcluded(clang::SourceLocation location);
+    inline bool isExcluded(clang::Stmt *stmt) {
+        return stmt && isExcluded(stmt->getLocStart());
+    }
+    inline bool isExcluded(clang::Expr *expr) {
+        return expr && isExcluded(expr->getLocStart());
+    }
+
 private:
     bool supportsC() const;
     bool supportsCXX() const;

@@ -12,7 +12,7 @@ void AbstractASTRuleBase::addViolation(clang::SourceLocation startLocation,
     clang::SourceLocation endLocation, RuleBase *rule, const std::string& message)
 {
     clang::SourceManager *sourceManager = &_carrier->getSourceManager();
-    if (isExcluded(startLocation, _excludePaths, sourceManager)) {
+    if (locationIsExcluded(startLocation, _excludePaths, sourceManager)) {
         return;
     }
     /* if it is a macro location return the expansion location or the spelling location */
@@ -48,6 +48,11 @@ void AbstractASTRuleBase::addViolation(const clang::Stmt *stmt,
     {
         addViolation(stmt->getLocStart(), stmt->getLocEnd(), rule, message);
     }
+}
+
+bool AbstractASTRuleBase::isExcluded(clang::SourceLocation location)
+{
+    return locationIsExcluded(location, _excludePaths, &_carrier->getSourceManager());
 }
 
 unsigned int AbstractASTRuleBase::supportedLanguages() const
